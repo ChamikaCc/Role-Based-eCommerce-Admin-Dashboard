@@ -1,0 +1,20 @@
+{
+  "name": "role-based-ecommerce-admin-dashboard",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ChamikaCc/Role-Based-eCommerce-Admin-Dashboard.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ChamikaCc/Role-Based-eCommerce-Admin-Dashboard/issues"
+  },
+  "homepage": "https://github.com/ChamikaCc/Role-Based-eCommerce-Admin-Dashboard#readme"
+}
