@@ -5,7 +5,20 @@ import User from './user.js';
 const container ={
     sequlize,
     User,
+    Category,
+    Product,
+    Order,
+    OrderItem,
+    Setting,
 }
 
 export default container;
-export {sequlize, User};
+export {
+    sequlize, 
+    User,
+    Category,
+    Product,
+    Order,
+    OrderItem,
+    Setting
+};
