@@ -9,26 +9,14 @@ const Category = sequelize.define(
       autoIncrement: true,
       primaryKey: true,
     },
-    categoryId: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-    },
     name: {
       type: DataTypes.STRING,
       allowNull: false,
+      unique: true,
     },
     description: {
       type: DataTypes.TEXT,
       allowNull: true,
-    },
-    price: {
-      type: DataTypes.DECIMAL(10, 2),
-      allowNull: false,
-    },
-    stock: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      defaultValue: 0,
     },
     imageUrl: {
       type: DataTypes.STRING,
@@ -43,6 +31,7 @@ const Category = sequelize.define(
     tableName: "categories",
     timestamps: true,
     underscored: true,
-  },
+  }
 );
+
 export default Category;
