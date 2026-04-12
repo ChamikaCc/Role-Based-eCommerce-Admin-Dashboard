@@ -28,7 +28,7 @@ async function startServer(){
         await container.sequelize.authenticate(); //check if the connection is working, wait until working
         console.log ("Database connected successfully!");
 
-        await container.sequelize.sync({alter: true}); //wait until, create database tables based on models
+        await container.sequelize.sync({force:true}); //wait until, create database tables based on models
         console.log("Models synchronized with database!");
 
         app.listen(PORT, ()=>{
