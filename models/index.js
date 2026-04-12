@@ -1,10 +1,11 @@
 import sequlize from '../config/db.js'; 
 import User from './user.js';
 
-const db ={
+//here contains all the models and sequlize instance to be exported together
+const container ={
     sequlize,
     User,
 }
 
-export default db;
+export default container;
 export {sequlize, User};
