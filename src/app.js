@@ -28,7 +28,7 @@ async function startServer(){
         await container.sequelize.authenticate(); //check if the connection is working, wait until working
         console.log ("Database connected successfully!");
 
-        await container.sequelize.sync({alter: false}); //wait until, create database tables  based on models,but dont change existing tables
+        await container.sequelize.sync({alter: false}); //wait until, create database tables based on models,but dont change existing tables
         console.log("Models synchronized with database!");
 
         app.listen(PORT, ()=>{
@@ -36,8 +36,8 @@ async function startServer(){
         })
     }catch(error){
         console.log("Unable to connect to the database or start the server: ", error.message);
-        process.exit(1); //exit with failure code
-    }
+        process.exit(1); //stop the app completely
+}
 }
 startServer();
 
