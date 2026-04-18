@@ -2,6 +2,7 @@ import express  from "express";
 import container from './models/index.js';
 import dotenv from 'dotenv';
 import bodyParser from "body-parser";
+import authRoutes from "./routes/authRoutes.js";
 
 dotenv.config();
 
@@ -17,6 +18,7 @@ app.get('/',(req,res)=>{
     }
 );
 //routes
+app.use("/api/auth", authRoutes);
 
 //
 
