@@ -10,33 +10,35 @@ async function seedAdmin() {
   try {
     await sequelize.authenticate();
     console.log("Database connected for seeding");
-    await sequelize.sync(); // make sure tables exist then it's safe for seed run
+    await sequelize.sync();
 
     const adminEmail = process.env.ADMIN_EMAIL || "admin@example.com";
     const adminPassword = process.env.ADMIN_PASSWORD || "Admin@123";
-    const adminName = process.env.ADMIN_NAME || "System Admin";
+    const firstName = process.env.ADMIN_FIRST_NAME || "System";
+    const lastName = process.env.ADMIN_LAST_NAME || "Admin";
 
     const existingAdmin = await User.findOne({
-      where: { email: adminEmail }, //Check whether admin already registered?
+      where: { email: adminEmail },
     });
 
     if (existingAdmin) {
-      console.log("Admin already exists.Seeding skipped.");
+      console.log("Admin already exists. Seeding skipped.");
       process.exit(0);
     }
 
-    const hashedPassword = await bcrypt.hash(adminPassword, 15); // Hashes plain password using bcrypt with salt rounds 15.we never store plain password in DB.
+    const hashedPassword = await bcrypt.hash(adminPassword, 10);
 
     await User.create({
-      name: adminName,
+      firstName,
+      lastName,
       email: adminEmail,
       password: hashedPassword,
       role: "admin",
     });
 
     console.log("Admin user created successfully!");
-    console.log("Email: " + adminEmail);
-    console.log("Password: (from.env ADMIN_PASSWORD)");
+    console.log("Email:", adminEmail);
+    console.log("Password: (from .env ADMIN_PASSWORD)");
     process.exit(0);
   } catch (error) {
     console.error("Failed to seed admin:", error.message);

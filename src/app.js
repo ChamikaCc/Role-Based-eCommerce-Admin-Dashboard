@@ -3,6 +3,7 @@ import container from './models/index.js';
 import dotenv from 'dotenv';
 import bodyParser from "body-parser";
 import authRoutes from "./routes/authRoutes.js";
+import { adminJs, buildAdminRouter } from "./admin/admin.js";
 
 dotenv.config();
 
@@ -17,10 +18,13 @@ app.get('/',(req,res)=>{
         res.status(200).json({msg:"API is running.."})
     }
 );
-//routes
+// api routes
 app.use("/api/auth", authRoutes);
 
-//
+//adminjs routes
+const adminRouter = buildAdminRouter();
+app.use(adminJs.options.rootPath, adminRouter);
+
 
 //Server setup
 const PORT = process.env.PORT || 5000;
@@ -44,3 +48,5 @@ async function startServer(){
 startServer();
 
 export default app;
+
+
