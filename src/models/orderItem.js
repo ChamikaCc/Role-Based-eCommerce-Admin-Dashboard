@@ -1,7 +1,6 @@
 import { DataTypes } from "sequelize";
 import sequelize from "../config/db.js";
 
-
 const OrderItem = sequelize.define(
   "OrderItem",
   {
@@ -13,10 +12,12 @@ const OrderItem = sequelize.define(
     orderId: {
       type: DataTypes.INTEGER,
       allowNull: false,
+      field: "order_id",
     },
     productId: {
       type: DataTypes.INTEGER,
       allowNull: false,
+      field: "product_id",
     },
     quantity: {
       type: DataTypes.INTEGER,
@@ -24,18 +25,21 @@ const OrderItem = sequelize.define(
       defaultValue: 1,
     },
     unitPrice: {
-      type: DataTypes.DECIMAL(10, 2), //10 digits total, 2 decimal places
+      type: DataTypes.DECIMAL(10, 2),
       allowNull: false,
+      field: "unit_price",
     },
     subTotal: {
       type: DataTypes.DECIMAL(10, 2),
       allowNull: false,
+      field: "sub_total",
     },
   },
   {
-    tableName: 'order_items',
+    tableName: "order_items",
     timestamps: true,
-  },
+    underscored: true,
+  }
 );
 
 export default OrderItem;
