@@ -27,7 +27,7 @@ const SettingsPage = (props) => {
     fetchSettings();
   }, []);
 
-  // ✏️ Handle change
+  //Handle change
   const handleChange = (index, value) => {
     const updated = [...settings];
     updated[index].value = value;
