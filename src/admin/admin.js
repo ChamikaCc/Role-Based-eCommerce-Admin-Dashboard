@@ -3,7 +3,12 @@ import AdminJSExpress from "@adminjs/express";
 import * as AdminJSSequelize from "@adminjs/sequelize";
 import bcrypt from "bcrypt";
 import {
-  User, Category, Product, Order, OrderItem, Setting,
+  User,
+  Category,
+  Product,
+  Order,
+  OrderItem,
+  Setting,
 } from "../models/index.js";
 
 AdminJS.registerAdapter({
@@ -11,21 +16,40 @@ AdminJS.registerAdapter({
   Database: AdminJSSequelize.Database,
 });
 
+function getRole(context) {
+  return String(context.currentAdmin?.role || "").trim().toLowerCase();
+}
+
 function isAdmin(context) {
-  return context.currentAdmin?.role === "admin";
+  return getRole(context) === "admin";
 }
+
 function isAdminOrUser(context) {
-  return ["admin", "user"].includes(context.currentAdmin?.role);
+  return ["admin", "user"].includes(getRole(context));
 }
+
+const adminOrReadOnlyActions = {
+  list: { isAccessible: isAdminOrUser, isVisible: isAdminOrUser },
+  show: { isAccessible: isAdminOrUser, isVisible: isAdminOrUser },
+
+  new: { isAccessible: isAdmin, isVisible: isAdmin },
+  edit: { isAccessible: isAdmin, isVisible: isAdmin },
+  delete: { isAccessible: isAdmin, isVisible: isAdmin },
+  bulkDelete: { isAccessible: isAdmin, isVisible: isAdmin },
+};
 
 export const adminJs = new AdminJS({
   rootPath: "/admin",
   resources: [
+    // Users: admin only
     {
       resource: User,
       options: {
         properties: {
-          password: { isVisible: { list: false, filter: false, show: false, edit: false } },
+          // Hide password in all views
+          password: {
+            isVisible: { list: false, filter: false, show: false, edit: false },
+          },
         },
         actions: {
           list: { isAccessible: isAdmin, isVisible: isAdmin },
@@ -33,13 +57,18 @@ export const adminJs = new AdminJS({
           new: { isAccessible: isAdmin, isVisible: isAdmin },
           edit: { isAccessible: isAdmin, isVisible: isAdmin },
           delete: { isAccessible: isAdmin, isVisible: isAdmin },
+          bulkDelete: { isAccessible: isAdmin, isVisible: isAdmin },
         },
       },
     },
-    { resource: Category, options: { actions: { list: { isAccessible: isAdminOrUser, isVisible: isAdminOrUser } } } },
-    { resource: Product, options: { actions: { list: { isAccessible: isAdminOrUser, isVisible: isAdminOrUser } } } },
-    { resource: Order, options: { actions: { list: { isAccessible: isAdminOrUser, isVisible: isAdminOrUser } } } },
-    { resource: OrderItem, options: { actions: { list: { isAccessible: isAdminOrUser, isVisible: isAdminOrUser } } } },
+
+    // Limited resources: admin full, user read-only
+    { resource: Category, options: { actions: adminOrReadOnlyActions } },
+    { resource: Product, options: { actions: adminOrReadOnlyActions } },
+    { resource: Order, options: { actions: adminOrReadOnlyActions } },
+    { resource: OrderItem, options: { actions: adminOrReadOnlyActions } },
+
+    // Settings: admin only
     {
       resource: Setting,
       options: {
@@ -49,6 +78,7 @@ export const adminJs = new AdminJS({
           new: { isAccessible: isAdmin, isVisible: isAdmin },
           edit: { isAccessible: isAdmin, isVisible: isAdmin },
           delete: { isAccessible: isAdmin, isVisible: isAdmin },
+          bulkDelete: { isAccessible: isAdmin, isVisible: isAdmin },
         },
       },
     },
@@ -58,8 +88,10 @@ export const adminJs = new AdminJS({
 async function authenticateAdmin(email, password) {
   const user = await User.findOne({ where: { email } });
   if (!user) return null;
+
   const ok = await bcrypt.compare(password, user.password);
   if (!ok) return null;
+
   return { id: user.id, email: user.email, role: user.role };
 }
 
