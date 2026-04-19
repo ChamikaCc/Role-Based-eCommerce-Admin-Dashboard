@@ -1,93 +1,194 @@
-# 🛒 eCommerce Admin Dashboard
+# Role-Based E-Commerce Admin Dashboard
 
-This project is a simple **Role-Based Admin Dashboard** for an eCommerce system.
-It is built using **Node.js, Express, Sequelize, PostgreSQL, and AdminJS**.
+A backend-focused eCommerce admin system built with **Node.js**, **Express**, **Sequelize**, **PostgreSQL**, **JWT Authentication**, and **AdminJS**.
 
----
-
-## 🚀 Features
-
-* User login with JWT authentication
-* Password hashing using bcrypt
-* Admin and User roles
-* Admin panel using AdminJS
-* Basic eCommerce models (User, Product, Order, etc.)
+This project demonstrates:
+- secure login with hashed passwords,
+- JWT-protected API routes,
+- and role-based access control (**admin** vs **user**) in AdminJS.
 
 ---
 
-## 🛠️ Technologies
+## 🚀 Tech Stack
 
-* Node.js
-* Express.js
-* PostgreSQL
-* Sequelize
-* AdminJS
+- Node.js
+- Express.js
+- PostgreSQL
+- Sequelize ORM
+- AdminJS + @adminjs/express + @adminjs/sequelize
+- bcrypt
+- JSON Web Token (JWT)
+- dotenv
 
 ---
 
-## ⚙️ Setup
+## 📁 Project Structure
 
-### 1. Install dependencies
-
+```bash
+project-root/
+├── config/
+│   └── db.js
+├── controllers/
+│   └── authController.js
+├── middleware/
+│   └── authMiddleware.js
+├── models/
+│   ├── user.js
+│   ├── category.js
+│   ├── product.js
+│   ├── order.js
+│   ├── orderItem.js
+│   ├── setting.js
+│   └── index.js
+├── routes/
+│   └── authRoutes.js
+├── admin/
+│   └── admin.js
+├── seed/
+│   └── seedAdmin.js
+├── app.js
+├── .env
+└── package.json
 ```
+
+---
+
+## ⚙️ Setup Instructions
+
+### 1) Clone repository
+```bash
+git clone <repo-url>
+cd <project-folder>
+```
+
+### 2) Install dependencies
+```bash
 npm install
 ```
 
-### 2. Create `.env` file
+### 3) Create `.env` file
+Add the following values:
 
-```
+```env
 PORT=5000
-DB_NAME=ecommerce_admin
-DB_USER=postgres
-DB_PASSWORD=yourpassword
-JWT_SECRET=mysecret
+
+DB_HOST=localhost
+DB_PORT=5432
+DB_NAME=database_name
+DB_USER=database_user
+DB_PASSWORD=database_password
+
+JWT_SECRET=jwt_secret
+
+SESSION_SECRET=session_secret
+COOKIE_SECRET=cookie_secret
 ```
 
-### 3. Create database
+### 4) Run project
+```bash
+npm run dev
+```
 
-```
-CREATE DATABASE ecommerce_admin;
-```
-
-### 4. Run project
-
-```
-npm start
-```
+Server runs on:
+- `http://localhost:5000`
+- Admin panel: `http://localhost:5000/admin`
 
 ---
 
-## 🌐 Access
+## 🗄️ Database Models
 
-* Server: http://localhost:5000
-* Admin Panel: http://localhost:5000/admin
+- **User**
+- **Category**
+- **Product**
+- **Order**
+- **OrderItem**
+- **Setting**
+
+### Relationships
+- User → Orders
+- Category → Products
+- Order → OrderItems
+- Product → OrderItems
 
 ---
 
-## 🔐 Login
+## 🔐 Authentication APIs
 
+### 1) Login
+**POST** `/api/auth/login`
+
+Request body:
+```json
+{
+  "email": "admin@example.com",
+  "password": "admin123"
+}
 ```
-Email: admin@example.com  
-Password: admin123  
-```
+
+Responses:
+- `200 OK` → returns JWT token
+- `401 Unauthorized` → invalid credentials
+
+### 2) Current User
+**GET** `/api/auth/me`  
+Requires Bearer token in `Authorization` header.
+
+Responses:
+- `200 OK` → user info
+- `401 Unauthorized` → missing/invalid token
 
 ---
 
-## 📦 Models
+## 👥 Role-Based Access Control (RBAC)
 
-* User
-* Category
-* Product
-* Order
-* OrderItem
-* Setting
+### Admin Role
+- Full CRUD access to:
+  - Users
+  - Categories
+  - Products
+  - Orders
+  - OrderItems
+  - Settings
+
+### User Role
+- Read-only access to:
+  - Categories
+  - Products
+  - Orders
+  - OrderItems
+- No access to:
+  - Users
+  - Settings
+
+> Password field is hidden in AdminJS views for security.
 
 ---
 
-## 👤 Roles
+## 🌱 Seed Admin User
 
-* **Admin** → full access
-* **User** → limited access
+Use seed script to create default admin user (hashed password).
+
+Example credentials:
+- Email: `admin@example.com`
+- Password: `admin123`
+- Role: `admin`
 
 ---
 
+## ✅ Testing Summary
+
+Tested features:
+- Login success/failure
+- JWT protected route (`/api/auth/me`)
+- Admin full permissions
+- User restricted permissions
+- CRUD operations in AdminJS
+- DB relationships
+- Password hashing with bcrypt
+
+
+## 👨‍💻 Author
+
+- Name: `chamika Raigama`
+
+---
