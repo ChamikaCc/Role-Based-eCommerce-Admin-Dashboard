@@ -48,7 +48,9 @@ project-root/
 │   └── seedAdmin.js
 ├── app.js
 ├── .env
+├── screenshots
 └── package.json
+
 ```
 
 ---
@@ -174,8 +176,8 @@ Example credentials:
 - Role: `admin`
 
 ---
-
-## ✅ Testing Summary
+## 📸 Evidence / Screenshots
+This project includes proof screenshots for AdminJS, Postman API testing, and pgAdmin database verification.
 
 Tested features:
 - Login success/failure
